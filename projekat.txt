@@ -1,0 +1,190 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <time.h>
+
+char tabla[3][3];
+const char IGRAC = 'X';
+const char KOMPJUTER = 'O';
+
+void reset_table();
+void ispis_table();
+int prazna_polja();
+void igracev_potez();
+void kompjuter_potez();
+char provera_pobednika();
+void ispis_pobednika(char);
+
+int main()
+{
+   char pobednik = ' ';
+   char odgovor = ' ';
+
+   do
+   {
+      pobednik = ' ';
+      odgovor = ' ';
+      reset_table();
+
+      while(pobednik == ' ' && prazna_polja() != 0)
+      {
+         ispis_table();
+
+         igracev_potez();
+         pobednik = provera_pobednika();
+         if(pobednik != ' ' || prazna_polja() == 0)
+         {
+            break;
+         }
+
+         kompjuter_potez();
+         pobednik = provera_pobednika();
+         if(pobednik != ' ' || prazna_polja() == 0)
+         {
+            break;
+         }
+      }
+
+      ispis_table();
+      ispis_pobednika(pobednik);
+
+      printf("\nDa li bi ste voleli da odigrate jos jednom? (Da ili Ne)");
+      scanf("%c");
+      scanf("%c", &odgovor);
+      odgovor = toupper(odgovor);
+   } while (odgovor == 'Y');
+
+   printf("Hvala vam sto ste igrali");
+
+   return 0;
+}
+
+void reset_table()
+{
+	int i,j;
+   for(i = 0; i < 3; i++)
+   {
+      for(j = 0; j < 3; j++)
+      {
+         tabla[i][j] = ' ';
+      }
+   }
+}
+void ispis_table()
+{
+   printf(" %c | %c | %c ", tabla[0][0], tabla[0][1], tabla[0][2]);
+   printf("\n---|---|---\n");
+   printf(" %c | %c | %c ", tabla[1][0], tabla[1][1], tabla[1][2]);
+   printf("\n---|---|---\n");
+   printf(" %c | %c | %c ", tabla[2][0], tabla[2][1], tabla[2][2]);
+   printf("\n");
+}
+int prazna_polja()
+{
+   int slobodna_mesta = 9,i,j;
+
+   for(i = 0; i < 3; i++)
+   {
+      for(j = 0; j < 3; j++)
+      {
+         if(tabla[i][j] != ' ')
+         {
+            slobodna_mesta--;
+         }
+      }
+   }
+   return slobodna_mesta;
+}
+void igracev_potez()
+{
+   int x;
+   int y;
+
+   do
+   {
+      printf("Unesi red od 1 do 3");
+      scanf("%d", &x);
+      x--;
+      printf("Unesi kolonu od 1 do 3");
+      scanf("%d", &y);
+      y--;
+
+      if(tabla[x][y] != ' ')
+      {
+         printf("Pogresan potez");
+      }
+      else
+      {
+         tabla[x][y] = IGRAC;
+         break;
+      }
+   } while (tabla[x][y] != ' ');
+   
+}
+void kompjuter_potez()
+{
+
+   srand(time(0));
+   int x;
+   int y;
+
+   if(prazna_polja() > 0)
+   {
+      do
+      {
+         x = rand() % 3;
+         y = rand() % 3;
+      } while (tabla[x][y] != ' ');
+      
+      tabla[x][y] = KOMPJUTER;
+   }
+   else
+   {
+      ispis_pobednika(' ');
+   }
+}
+char provera_pobednika()
+{
+	int i;
+
+   for(i = 0; i < 3; i++)
+   {
+      if(tabla[i][0] == tabla[i][1] && tabla[i][0] == tabla[i][2])
+      {
+         return tabla[i][0];
+      }
+   }
+
+   for(i = 0; i < 3; i++)
+   {
+      if(tabla[0][i] == tabla[1][i] && tabla[0][i] == tabla[2][i])
+      {
+         return tabla[0][i];
+      }
+   }
+
+   if(tabla[0][0] == tabla[1][1] && tabla[0][0] == tabla[2][2])
+   {
+      return tabla[0][0];
+   }
+   if(tabla[0][2] == tabla[1][1] && tabla[0][2] == tabla[2][0])
+   {
+      return tabla[0][2];
+   }
+
+   return ' ';
+}
+void ispis_pobednika(char pobednik)
+{
+   if(pobednik == IGRAC)
+   {
+      printf("POBEDIO SI");
+   }
+   else if(pobednik == KOMPJUTER)
+   {
+      printf("IZGUBIO SI");
+   }
+   else{
+      printf("NERESENO");
+   }
+}
