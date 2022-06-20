@@ -102,16 +102,16 @@ void igracev_potez()
 
    do
    {
-      printf("Unesi red od 1 do 3");
+      printf("Unesi red od 1 do 3: ");
       scanf("%d", &x);
       x--;
-      printf("Unesi kolonu od 1 do 3");
+      printf("Unesi kolonu od 1 do 3: ");
       scanf("%d", &y);
       y--;
 
       if(tabla[x][y] != ' ')
       {
-         printf("Pogresan potez");
+         printf("Pogresan potez\n");
       }
       else
       {
@@ -184,7 +184,8 @@ void ispis_pobednika(char pobednik)
    {
       printf("IZGUBIO SI");
    }
-   else{
+   else
+   {
       printf("NERESENO");
    }
-}
+}\
